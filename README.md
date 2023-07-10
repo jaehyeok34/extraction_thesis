@@ -13,3 +13,7 @@
     - 분류 성공: save queue에 데이터 넣고 thread 반환
     - 분류 실패: 남은 PDF 페이지 텍스트를 재추출해 GPT queue에 전달 후 event 대기
 6. save thread는 save queue의 데이터를 excel에 저장
+
+# 주요 기술
+1. thread pool을 이용한 multi-thread 구현
+2. queue와 event를 활용한 비동기 구현
