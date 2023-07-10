@@ -30,8 +30,8 @@ class ThreadModel:
 
             # PDF에서 텍스트 추출 시도
             try:
-                numbers = [page for page in pageNumber if page < (len(reader.pages) - 2)]
-                return [filePath] + [
+                numbers = [page for page in pageNumber if page < (len(reader.pages) - 2)]   # PDF 페이지 전처리
+                return [filePath] + [                                                       # fliePath + 추출한 텍스트
                     reader.pages[page].extract_text() for page in numbers
                 ]
             
@@ -41,9 +41,9 @@ class ThreadModel:
 
             # 이미지 기반 논문 예외
             except IndexError:
-                self.extractTextFromImage(filePath)
+                return self.extractTextFromImage(filePath)
 
-    def extractTextFromImage(self, filePath):
+    def extractTextFromImage(self, filePath) -> list:
         # TODO: 이미지 기반 논문 텍스트 추출(Google Cloud Vision API)
         pass
 
