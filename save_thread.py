@@ -10,22 +10,20 @@ class SaveThread:
 
     def work(self):
         while True:
-            saveData: dict = WorkQueue.saveQueue.get()            # queue 모니터링(bloking)
-            
-            # TODO: excel에 saveData 저장하기
+            saveData: dict = WorkQueue.saveQueue.get()              # save queue 모니터링(bloking)
             excelFile = None
             try:
-                excelFile = load_workbook(SaveThread.SAVE_PATH)
+                excelFile = load_workbook(SaveThread.SAVE_PATH)     # excel 존재할 경우
             except FileNotFoundError:
-                excelFile = Workbook()
-                
-            workSheet = excelFile.active
-            workSheet.title = 'thesis'
+                excelFile = Workbook()                              # 존재하지 않을 경우 새로운 file 생성
+
+            workSheet = excelFile.active                            # 활성화된 시트
+            workSheet.title = 'thesis'                              # 시트 제목 변경
 
             workSheet.append([
-                saveData[SaveThread.TITLE_KEY],
-                saveData[SaveThread.AUTHOR_KEY],
-                saveData[SaveThread.ACK_KEY],
+                saveData[SaveThread.TITLE_KEY],                     # 제목
+                saveData[SaveThread.AUTHOR_KEY],                    # 저자
+                saveData[SaveThread.ACK_KEY],                       # 사사
             ])
 
-            excelFile.save(SaveThread.SAVE_PATH)
+            excelFile.save(SaveThread.SAVE_PATH)                    # 저장

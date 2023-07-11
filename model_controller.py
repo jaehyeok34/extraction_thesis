@@ -66,7 +66,6 @@ class ModelController:
                 event.clear()                               # 이벤트 초기화
                 WorkQueue.gptQueue.put([text, event])       # GPT Queue에 전달
                 event.wait()                                # 이벤트 발생 대기
-    
-    
+
             WorkQueue.saveQueue.put(event.retValue)         # GPT 분류 성공(saveQueue에 전달)
             event.clear()                                   # 이벤트 초기화 후 thread 반환
