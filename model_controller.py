@@ -24,7 +24,7 @@ class ModelController:
                 pdfData,
             ).add_done_callback(self.putGPTQueue)
 
-    def extractTextFromPDF(self, filePath, pageNumber:list = [0, -2, -1]) -> list:
+    def extractTextFromPDF(self, filePath, pageNumber:list = [0, 1, -2, -1]) -> list:
         with open(filePath, "rb") as pdf:
             reader = PyPDF2.PdfReader(pdf)
 
@@ -56,7 +56,7 @@ class ModelController:
             event.wait()                                    # 이벤트 발생 대기
 
             pageStart = 1                                   # 추가 논문 시작 페이지
-            step = 3                                        # 추가 논문 페이징 단위
+            step = 1                                        # 추가 논문 페이징 단위
             while event.retValue == ModelController.SIGNAL: # GPT 분류 실패(논문 재요청, 성공까지 반복)
                 text = self.extractTextFromPDF(             # 텍스트 추출
                     filePath, 

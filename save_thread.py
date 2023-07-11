@@ -27,3 +27,4 @@ class SaveThread:
             ])
 
             excelFile.save(SaveThread.SAVE_PATH)                    # 저장
+            print('저장 완료')
