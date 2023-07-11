@@ -1,5 +1,5 @@
 from work_queue import WorkQueue
-from thread_model import ThreadModel
+from model_controller import ModelController
 from model_event import ModelEvent
 import threading
 import time 
@@ -23,4 +23,4 @@ class GptThread:
 
             #################################
             time.sleep(3)
-            event.set(ThreadModel.SIGNAL)
+            event.set(ModelController.SIGNAL)

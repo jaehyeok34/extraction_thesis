@@ -1,5 +1,5 @@
 from work_queue import WorkQueue
-from thread_model import ThreadModel
+from model_controller import ModelController
 from gpt_thread import GptThread
 import threading
 import time
@@ -17,7 +17,7 @@ def main():
     
 
 
-model = ThreadModel()
+model = ModelController()
 gpt = GptThread()
 
 modelThread = threading.Thread(target= lambda: model.work())

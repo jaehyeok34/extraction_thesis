@@ -5,7 +5,7 @@ from PyPDF2 import errors as PdfError
 from work_queue import WorkQueue
 from model_event import ModelEvent
 
-class ThreadModel:
+class ModelController:
     SIGNAL = "request again"
 
     def __init__(self) -> None:
@@ -49,24 +49,24 @@ class ThreadModel:
 
     def putGPTQueue(self, future: futures.Future) -> None:
         if future.result() is not None:
-            filePath = future.result()[0]               # PDF 파일 경로
-            text = future.result()[1:]                  # 추출한 텍스트
-            event = ModelEvent()                        # 이벤트 객체
-            WorkQueue.gptQueue.put([text, event])       # GPT Queue에 전달
-            event.wait()                                # 이벤트 발생 대기
+            filePath = future.result()[0]                   # PDF 파일 경로
+            text = future.result()[1:]                      # 추출한 텍스트
+            event = ModelEvent()                            # 이벤트 객체
+            WorkQueue.gptQueue.put([text, event])           # GPT Queue에 전달
+            event.wait()                                    # 이벤트 발생 대기
 
-            pageStart = 1                               # 추가 논문 시작 페이지
-            step = 3                                    # 추가 논문 페이징 단위
-            while event.retValue == ThreadModel.SIGNAL: # GPT 분류 실패(논문 재요청, 성공까지 반복)
-                text = self.extractTextFromPDF(         # 텍스트 추출
+            pageStart = 1                                   # 추가 논문 시작 페이지
+            step = 3                                        # 추가 논문 페이징 단위
+            while event.retValue == ModelController.SIGNAL: # GPT 분류 실패(논문 재요청, 성공까지 반복)
+                text = self.extractTextFromPDF(             # 텍스트 추출
                     filePath, 
                     [page for page in range(pageStart, pageStart + step)],
                 )[1:]
-                pageStart += step                       # 다음 논문 시작 페이지 갱신
-                event.clear()                           # 이벤트 초기화
-                WorkQueue.gptQueue.put([text, event])   # GPT Queue에 전달
-                event.wait()                            # 이벤트 발생 대기
-
-
-            WorkQueue.saveQueue.put(event.retValue)     # GPT 분류 성공(saveQueue에 전달)
-            event.clear()                               # 이벤트 초기화 후 thread 반환
+                pageStart += step                           # 다음 논문 시작 페이지 갱신
+                event.clear()                               # 이벤트 초기화
+                WorkQueue.gptQueue.put([text, event])       # GPT Queue에 전달
+                event.wait()                                # 이벤트 발생 대기
+    
+    
+            WorkQueue.saveQueue.put(event.retValue)         # GPT 분류 성공(saveQueue에 전달)
+            event.clear()                                   # 이벤트 초기화 후 thread 반환
