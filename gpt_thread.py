@@ -3,6 +3,7 @@ from model_controller import ModelController
 from model_event import ModelEvent
 from save_thread import SaveThread
 import openai
+import time
 from config import *
 
 class GptThread:
@@ -37,6 +38,7 @@ class GptThread:
             # TODO: GPT 분류 실패
             # else:
             event.set(ModelController.SIGNAL)       # GPT 분류 실패
+            time.sleep(1000)
                 
     def get_paper_details(
             self, 
